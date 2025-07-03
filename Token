@@ -10,6 +10,7 @@ contract ZamaDoge is ERC20, Ownable {
 
     mapping(address => bool) private _isExcludedFromFee;
     mapping(address => bool) public isWhitelisted;
+    mapping(address => bool) public isBlacklisted;
 
     constructor(address _taxWallet) ERC20("Zama Doge", "ZDOGE") {
         _mint(msg.sender, 1_000_000_000 * 10 ** decimals());
@@ -38,7 +39,14 @@ contract ZamaDoge is ERC20, Ownable {
         isWhitelisted[account] = status;
     }
 
+    function setBlacklist(address account, bool status) external onlyOwner {
+        isBlacklisted[account] = status;
+    }
+
     function _transfer(address from, address to, uint256 amount) internal virtual override {
+        require(!isBlacklisted[from], "Sender is blacklisted");
+        require(!isBlacklisted[to], "Recipient is blacklisted");
+
         if (
             _isExcludedFromFee[from] || 
             _isExcludedFromFee[to] || 
