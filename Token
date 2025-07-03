@@ -10,7 +10,7 @@ contract ZamaDoge is ERC20, Ownable {
     mapping(address => bool) private _isExcludedFromFee;
 
     constructor(address _taxWallet) ERC20("Zama Doge", "ZDOGE") {
-        _mint(msg.sender, 1_000_000_000 * 10 ** decimals());
+        _mint(msg.sender, 100_000_000_000 * 10 ** decimals());
         taxWallet = _taxWallet;
         _isExcludedFromFee[msg.sender] = true;
         _isExcludedFromFee[address(this)] = true;
